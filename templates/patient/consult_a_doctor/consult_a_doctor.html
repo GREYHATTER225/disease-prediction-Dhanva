@@ -1,0 +1,252 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --cream-bg: #fdfaf5;
+        --orange-main: #ff8c00;
+        --orange-gloss: #ffa502;
+        --deep-shadow: rgba(0, 0, 0, 0.08);
+        --light-reflect: rgba(255, 255, 255, 0.9);
+    }
+
+    body {
+        background-color: var(--cream-bg);
+        font-family: 'Outfit', sans-serif;
+        background-image: radial-gradient(circle at top right, rgba(255,140,0,0.03), transparent);
+    }
+
+    .page-title {
+        color: #4e342e;
+        font-weight: 700;
+        text-shadow: 1px 1px 2px white;
+        margin-top: 40px;
+    }
+
+    /* THE SKEUOMORPHIC TABLE CONTAINER */
+    .glass-panel {
+        background: rgba(255, 253, 250, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 35px;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 
+            20px 20px 60px #e1ddd7, 
+            -20px -20px 60px #ffffff,
+            inset 1px 1px 2px white; /* Top edge light reflection */
+        margin-top: 30px;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 15px; /* Creates the "floating row" effect */
+        background: transparent;
+    }
+
+    /* SKEUOMORPHIC TABLE HEADER */
+    .table thead th {
+        border: none;
+        color: #8d6e63;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+    /* THE FLOATING ROW DESIGN */
+    .table tbody tr {
+        background: linear-gradient(145deg, #ffffff, #f9f6f1);
+        box-shadow: 
+            8px 8px 16px #e8e4de, 
+            -4px -4px 12px #ffffff;
+        border-radius: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        transform: scale(1.01) translateY(-2px);
+        box-shadow: 
+            12px 12px 24px #dfdbd4, 
+            -6px -6px 18px #ffffff;
+    }
+
+    .table td {
+        border: none !important;
+        padding: 20px !important;
+        vertical-align: middle !important;
+        text-align: center;
+        color: #5d4037;
+        font-weight: 500;
+    }
+
+    .table td:first-child { border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
+    .table td:last-child { border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+
+    /* DOCTOR NAME BADGE */
+    .doc-name {
+        font-weight: 700;
+        color: #2d3436;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .spec-badge {
+        background: #fff3e0;
+        color: #e67e22;
+        padding: 5px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid rgba(230, 126, 34, 0.1);
+    }
+
+    /* RATING STARS GLOSS */
+    .rating-box {
+        color: #f1c40f;
+        text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+    }
+
+    /* TACTILE SKEUO BUTTONS */
+    .btn-skeuo {
+        border: none;
+        padding: 12px 25px;
+        border-radius: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 1px;
+        transition: 0.2s all;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Blue Profile Button */
+    .btn-profile {
+        background: linear-gradient(145deg, #6c5ce7, #a29bfe);
+        color: white;
+        box-shadow: 
+            0 4px 15px rgba(108, 92, 231, 0.3),
+            inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Orange Consult Button (GLOSSY) */
+    .btn-consult {
+        background: linear-gradient(145deg, #ff8c00, #ffb142);
+        color: white;
+        box-shadow: 
+            0 4px 15px rgba(255, 140, 0, 0.3),
+            inset 0 2px 4px rgba(255, 255, 255, 0.5); /* Top shine */
+    }
+
+    .btn-skeuo:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
+
+    .btn-skeuo:active {
+        transform: translateY(1px);
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* SCROLLBAR STYLE */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--cream-bg); }
+    ::-webkit-scrollbar-thumb { 
+        background: #e0d9cf; 
+        border-radius: 10px;
+        border: 2px solid var(--cream-bg);
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    
+    <div class="text-center">
+        <h2 class="page-title">
+            <i class="fas fa-user-md me-2" style="color: var(--orange-main);"></i>
+            Consult Professional Specialists
+        </h2>
+        <p class="text-muted">Top-rated doctors available for your specific diagnosis.</p>
+    </div>
+
+    <div class="glass-panel">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Doctor Identity</th>
+                        <th>Specialization</th>
+                        <th>Contact</th>
+                        <th>Expertise Rating</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in dobj %}
+                    <tr>
+                        <td>
+                            <div class="doc-name">
+                                <div style="width: 40px; height: 40px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 2px 2px 5px #ccc;">
+                                    <i class="fas fa-user text-muted"></i>
+                                </div>
+                                <span>Dr. {{i.name}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="spec-badge">{{i.specialization}}</span>
+                        </td>
+                        <td>
+                            <span style="font-size: 14px; opacity: 0.8;">{{i.user.email}}</span>
+                        </td>
+                        <td>
+                            <div class="rating-box">
+                                {% if i.rating >= 4 %}
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                {% endif %}
+                                <span class="ms-1" style="color: #8d6e63; font-size: 13px;">({{i.rating}}/5)</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <form action="{% url 'dviewprofile' i.user.username %}" method="GET">
+                                    <button type="submit" class="btn-skeuo btn-profile">
+                                        <i class="far fa-id-badge me-1"></i> Profile
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'make_consultation' i.user.username %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-skeuo btn-consult">
+                                        <i class="fas fa-calendar-check me-1"></i> Consult
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-5 text-muted">No specialists found matching your search.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="text-center mt-4 text-muted small">
+        <i class="fas fa-shield-alt me-1"></i> Your medical information is encrypted and shared only with the selected consultant.
+    </p>
+</div>
+{% endblock %}

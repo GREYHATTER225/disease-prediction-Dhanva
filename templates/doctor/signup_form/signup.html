@@ -1,0 +1,340 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔱Dhanva | Doctor Registration</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --cyan-glow: #0ea5e9;
+            --bg-cream: #f8f7f4;
+            --card-light: #ffffff;
+            --shadow-dark: #d1d5db;
+            --text-main: #374151;
+            --input-shadow-in: inset 4px 4px 8px #e5e7eb, inset -4px -4px 8px #f9fafb;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-cream), #f0ede9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .main-card {
+            display: flex;
+            width: 1100px;
+            height: 85vh;
+            min-height: 750px;
+            background: var(--card-light);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.15);
+            position: relative;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--cyan-glow));
+            z-index: 10;
+        }
+
+        .left-side {
+            flex: 1;
+            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(14, 165, 233, 0.7)), 
+                        url('https://images.unsplash.com/photo-1587590812752-2dadb4754e99?auto=format&fit=crop&q=80&w=800');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .left-side h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 52px; margin: 0; font-weight: 700; letter-spacing: -2px;
+        }
+
+        .right-side {
+            flex: 1.4;
+            padding: 40px 60px;
+            background: var(--bg-cream);
+            overflow-y: auto;
+        }
+
+        .form-title {
+            font-size: 28px;
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        .input-group { position: relative; }
+
+        /* Floating Label Logic */
+        .input-container {
+            background: var(--bg-cream);
+            border-radius: 15px;
+            box-shadow: var(--input-shadow-in);
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            position: relative;
+        }
+
+        .input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            font-size: 14px;
+            z-index: 2;
+        }
+
+        .input-label {
+            position: absolute;
+            left: 50px;
+            top: 15px;
+            font-size: 13px;
+            color: #9ca3af;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Float Trigger */
+        .input-field:focus + .input-label,
+        .input-field:not(:placeholder-shown) + .input-label {
+            top: -12px;
+            left: 15px;
+            font-size: 11px;
+            color: var(--cyan-glow);
+            background: var(--bg-cream);
+            padding: 0 5px;
+            font-weight: 700;
+        }
+
+        .icon { color: var(--primary-blue); min-width: 30px; opacity: 0.6; }
+
+        /* Gender Section */
+        .gender-section {
+            grid-column: span 2;
+            padding: 15px;
+            background: var(--bg-cream);
+            border-radius: 15px;
+            box-shadow: var(--input-shadow-in);
+        }
+
+        .gender-container { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
+
+        .radio-item {
+            cursor: pointer;
+            padding: 8px 20px;
+            background: var(--bg-cream);
+            border-radius: 10px;
+            box-shadow: var(--input-shadow-in);
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .radio-item input { display: none; }
+        .radio-item:has(input:checked) {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--cyan-glow));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+        }
+
+        @media (max-width: 800px) {
+            .main-card { flex-direction: column; width: 95%; height: auto; }
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <div class="left-side">
+        <h1>🔱Dhanva</h1>
+        <p>Medical Excellence via AI</p>
+    </div>
+
+    <div class="right-side">
+        <div class="form-title">Doctor Registration</div>
+        
+        <form action="signup_doctor" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-user icon"></i>
+                        <input class="input-field" type="text" name="username" placeholder=" " required>
+                        <span class="input-label">Username</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-id-badge icon"></i>
+                        <input class="input-field" type="text" name="name" placeholder=" " required>
+                        <span class="input-label">Full Name</span>
+                    </div>
+                </div>
+
+                <div class="full-width input-group">
+                    <div class="input-container">
+                        <i class="fa fa-envelope icon"></i>
+                        <input class="input-field" type="email" name="email" placeholder=" " required>
+                        <span class="input-label">Email Address</span>
+                    </div>
+                </div>
+
+                <div class="full-width input-group">
+                    <div class="input-container">
+                        <i class="fa fa-map-marker icon"></i>
+                        <input class="input-field" type="text" name="address" placeholder=" " required>
+                        <span class="input-label">Clinic / Hospital Address</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-phone icon"></i>
+                        <input class="input-field" type="text" name="mobile_no" placeholder=" " required>
+                        <span class="input-label">Mobile No.</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-id-card icon"></i>
+                        <input class="input-field" type="text" name="registration_no" placeholder=" " required>
+                        <span class="input-label">Medical Reg. No.</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 10px; color: var(--primary-blue); font-weight: bold;">Date of Birth</label>
+                    <div class="input-container">
+                        <input class="input-field" type="date" name="dob" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label style="font-size: 10px; color: var(--primary-blue); font-weight: bold;">Reg. Year</label>
+                    <div class="input-container">
+                        <input class="input-field" type="date" name="year_of_registration" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-graduation-cap icon"></i>
+                        <input class="input-field" type="text" name="qualification" placeholder=" " required>
+                        <span class="input-label">Qualification</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-university icon"></i> 
+                        <input class="input-field" type="text" name="state_medical_council" placeholder=" " required>
+                        <span class="input-label">State Medical Council</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <select class="input-field" name="specialization" required style="background: transparent;">
+                            <option value="" disabled selected>Specialization</option>
+                            <option>Cardiologist</option>
+                            <option>Dermatologist</option>
+                            <option>General Physician</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-lock icon"></i>
+                        <input class="input-field" type="password" name="password" placeholder=" " required>
+                        <span class="input-label">Password</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-container">
+                        <i class="fa fa-lock icon"></i>
+                        <input class="input-field" type="password" name="password1" placeholder=" " required>
+                        <span class="input-label">Confirm</span>
+                    </div>
+                </div>
+
+                <div class="gender-section">
+                    <div class="gender-container">
+                        <label class="radio-item"><input type="radio" name="gender" value="male" checked> Male</label>
+                        <label class="radio-item"><input type="radio" name="gender" value="female"> Female</label>
+                    </div>
+                </div>
+            </div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div style="
+            color:#dc2626;
+            font-size:13px;
+            margin-top:10px;
+            font-weight:600;
+        ">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+            <button type="submit" class="signup-btn">Register Doctor</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

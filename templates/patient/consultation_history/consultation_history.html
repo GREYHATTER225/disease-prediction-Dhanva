@@ -1,0 +1,188 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --cream-bg: #fdfaf5;
+        --orange-main: #ff8c00;
+        --text-brown: #4e342e;
+    }
+
+    body {
+        background-color: var(--cream-bg);
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .page-title {
+        color: var(--text-brown);
+        font-weight: 700;
+        margin-top: 40px;
+    }
+
+    /* CONTAINER PANEL */
+    .history-panel {
+        background: rgba(255, 253, 250, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 35px;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 20px 20px 60px #e1ddd7, -20px -20px 60px #ffffff;
+        margin-top: 30px;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        background: transparent;
+    }
+
+    .table thead th {
+        border: none;
+        color: #8d6e63;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1.2px;
+        padding-bottom: 15px;
+        text-align: center;
+    }
+
+    /* FLOATING ROW DESIGN */
+    .table tbody tr {
+        background: linear-gradient(145deg, #ffffff, #f9f6f1);
+        box-shadow: 8px 8px 16px #e8e4de, -4px -4px 12px #ffffff;
+        border-radius: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        transform: scale(1.005);
+        box-shadow: 10px 10px 20px #dfdbd4, -5px -5px 15px #ffffff;
+    }
+
+    .table td {
+        border: none !important;
+        padding: 20px !important;
+        vertical-align: middle !important;
+        text-align: center;
+        color: #5d4037;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    /* STATUS BADGES */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .status-pending { background: #fff3e0; color: #e67e22; }
+    .status-closed { background: #e8f5e9; color: #2e7d32; }
+
+    /* BUTTONS */
+    .btn-skeuo {
+        border: none;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        transition: 0.2s;
+        box-shadow: 4px 4px 10px #e1ddd7, -2px -2px 8px #ffffff;
+    }
+
+    .btn-view { background: #fdfaf5; color: var(--text-brown); }
+    .btn-resume { background: var(--orange-main); color: white; }
+
+    .btn-skeuo:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .btn-skeuo:active { transform: translateY(0); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1); }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    
+    <div class="text-center">
+        <h2 class="page-title">
+            <i class="fas fa-history me-2" style="color: var(--orange-main);"></i>
+            Consultation History
+        </h2>
+        <p class="text-muted">Track your previous diagnoses and medical discussions.</p>
+    </div>
+
+    <div class="history-panel">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Consultant</th>
+                        <th>Predicted Condition</th>
+                        <th>Date Recorded</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in consultation %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                <div style="width: 35px; height: 35px; background: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user-md" style="color: var(--orange-main); font-size: 14px;"></i>
+                                </div>
+                                <div class="text-start">
+                                    <span class="d-block fw-bold">Dr. {{i.doctor.name}}</span>
+                                    <small class="text-muted" style="font-size: 10px;">{{i.doctor.user.email}}</small>
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <span class="fw-bold" style="color: var(--orange-main);">{{i.diseaseinfo.diseasename}}</span>
+                        </td>
+
+                        <td>
+                            <span class="text-muted">{{i.consultation_date}}</span>
+                        </td>
+
+                        <td>
+                            {% if i.status == "Pending" %}
+                                <span class="status-badge status-pending">In Progress</span>
+                            {% else %}
+                                <span class="status-badge status-closed">{{i.status}}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <form action="{% url 'dviewprofile' i.doctor.user.username %}" method="GET">
+                                    <button type="submit" class="btn-skeuo btn-view">
+                                        <i class="far fa-user me-1"></i> Profile
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'consultationview' i.id %}" method="GET">
+                                    <button type="submit" class="btn-skeuo btn-resume">
+                                        <i class="fas fa-comment-medical me-1"></i> Resume
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-5 text-muted">No consultation records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

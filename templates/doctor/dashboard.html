@@ -1,0 +1,63 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'doctor/doctor_ui/prof.css' %}">
+<style>
+.glass-card { background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+.stats-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h2 class="text-center mb-5">Doctor Dashboard - {{ duser.doctor.name }}</h2>
+    
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center stats-card">
+                <h3>{{ total_patients }}</h3>
+                <p>Total Patients</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center stats-card">
+                <h3>{{ total_appointments }}</h3>
+                <p>Appointments</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center stats-card">
+                <h3>{{ doctor_rating }}</h3>
+                <p>Rating</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card p-5">
+        <h4>Upcoming Appointments</h4>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient.name }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.time_slot }}</td>
+                    <td>{{ appointment.status|capfirst }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center">No appointments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

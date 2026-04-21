@@ -1,0 +1,110 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'patient/patient_ui/prof.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+.glass-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+.time-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; }
+.slot-available { background: linear-gradient(135deg, #4ade80, #22c55e); color: white; }
+.slot-booked { background: #6b7280; color: white; cursor: not-allowed; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card p-5">
+                <div class="text-center mb-5">
+                    <h2><i class="fas fa-calendar-plus text-primary"></i> Book Appointment</h2>
+                    <p class="text-muted">Select date & time with Dr. {{ doctor.name }}</p>
+                </div>
+
+                <form method="post" action="{% url 'book_appointment' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold">Doctor</label>
+                            <div class="p-4 text-center glass-card">
+                                <h5>{{ doctor.name }}</h5>
+                                <p class="text-muted mb-1">{{ doctor.specialization }}</p>
+                                <span class="badge bg-success">{{ doctor.rating }} ★ Average Rating</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold">Date <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control p-3 border-radius-20 shadow-sm" id="appointment_date" name="appointment_date" placeholder="Select date" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-bold">Time Slot <span class="text-danger">*</span></label>
+                        <div class="time-slots p-4" id="time_slots">
+                            {% for slot in available_slots %}
+                            <button type="button" class="slot-available p-3 rounded-3 fw-bold mb-3 slot-btn" data-slot="{{ slot }}" style="border: none; cursor: pointer;">
+                                {{ slot }} 
+                                <i class="fas fa-check-circle text-white-50"></i>
+                            </button>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" id="selected_slot" name="time_slot">
+                    </div>
+
+                    <div class="text-end">
+                        <a href="{% url 'doctor_ui' %}" class="btn btn-outline-secondary px-5 me-3">Cancel</a>
+                        <button type="submit" class="btn glass-btn px-5" style="background: linear-gradient(135deg, #4a90e2, #357abd); color: white;">
+                            <i class="fas fa-lock mr-2"></i>Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+flatpickr("#appointment_date", {
+    dateFormat: "Y-m-d",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // Disable weekends
+            return (date.getDay() === 0 || date.getDay() === 6);
+        }
+    ],
+    onChange: function(selectedDates, dateStr, instance) {
+        // AJAX to get available slots for selected date
+        fetch(`/get_slots/?date=${dateStr}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(slots => updateSlots(slots));
+    }
+});
+
+function updateSlots(slots) {
+    const container = document.getElementById('time_slots');
+    container.innerHTML = '';
+    slots.forEach(slot => {
+        const btn = document.createElement('button');
+        btn.className = 'slot-available p-3 rounded-3 fw-bold mb-3 slot-btn';
+        btn.dataset.slot = slot;
+        btn.innerHTML = `${slot} <i class="fas fa-check-circle text-white-50"></i>`;
+        btn.onclick = () => selectSlot(slot);
+        container.appendChild(btn);
+    });
+}
+
+function selectSlot(slot) {
+    document.getElementById('selected_slot').value = slot;
+    document.querySelectorAll('.slot-btn').forEach(btn => {
+        btn.classList.remove('slot-selected');
+    });
+    event.target.classList.add('slot-selected');
+}
+</script>
+{% endblock %}

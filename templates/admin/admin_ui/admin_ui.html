@@ -1,0 +1,168 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<style>
+    :root {
+        --bg: #050508;
+        --card: #11111b;
+        --mint: #00ffa3;
+        --purple: #bd93f9;
+        --text-dim: #94a3b8;
+        --glass-border: rgba(189, 147, 249, 0.2);
+    }
+
+    body {
+        background-color: var(--bg);
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(189, 147, 249, 0.15) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(0, 255, 163, 0.05) 0px, transparent 50%);
+        color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+    }
+
+    #box {
+        padding: 80px 12%;
+    }
+
+    /* Next-Level Header */
+    .admin-label {
+        color: var(--mint);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .admin-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(to bottom right, #fff 30%, var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Futuristic Cards */
+    .next-card {
+        background: var(--card);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .next-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(0, 255, 163, 0.03), transparent);
+        transform: translateX(-100%);
+        transition: 0.6s;
+    }
+
+    .next-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--mint);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .next-card:hover::before {
+        transform: translateX(100%);
+    }
+
+    /* The "Power" Button */
+    .btn-power {
+        background: rgba(255, 255, 255, 0.03);
+        color: #fff;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-power:hover {
+        background: var(--mint);
+        color: var(--bg);
+        border-color: var(--mint);
+        box-shadow: 0 0 20px rgba(0, 255, 163, 0.4);
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        background: #0f1117;
+        border: 1px solid var(--purple);
+        border-radius: 24px;
+        box-shadow: 0 0 50px rgba(189, 147, 249, 0.1);
+    }
+
+    .feedback-chip {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div id="box" class="container">
+    <div class="mb-5">
+        <span class="admin-label">Terminal Active</span>
+        <h1 class="admin-title">Core_Admin: {{auser.username}}</h1>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="next-card">
+                <h3 class="h5 mb-3">System Directory</h3>
+                <p class="text-dim small mb-4">Modify user parameters and structural data models.</p>
+                <a class="btn-power" href="{% url 'admin:index' %}">Manage Data</a>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="next-card">
+                <h3 class="h5 mb-3">Pulse Monitor</h3>
+                <p class="text-dim small mb-4">Review incoming user feedback and system pings.</p>
+                <button class="btn-power w-100" data-toggle="modal" data-target="#myModal2">View Signals</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal2">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 px-4 pt-4">
+                    <h4 class="modal-title font-weight-bold" style="color: var(--purple);">Feedback Logs</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body p-4">
+                    {% for i in Feedback %}
+                    <div class="feedback-chip">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span style="color: var(--mint); font-weight: bold;">@{{i.sender.username}}</span>
+                            <small class="text-muted">{{i.created}}</small>
+                        </div>
+                        <p class="m-0" style="color: #cbd5e1; line-height: 1.6;">{{i.feedback}}</p>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-4 text-muted">No signals captured.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

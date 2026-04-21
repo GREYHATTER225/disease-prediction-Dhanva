@@ -1,0 +1,186 @@
+/* CLINICAL VIBE DOCTOR LOGIN - SKEUOMORPHISM 2.0 */
+:root {
+    --dark-bg: #0f1113;
+    --card-bg: #1a1d21;
+    --cyan-neon: #00f2ff;
+    --text-dim: #94a3b8;
+    --border-color: #2d3748;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--dark-bg) !important;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+.limiter {
+    width: 100%;
+    margin: 0 auto;
+    background: var(--dark-bg) !important;
+}
+
+.container-login100 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--dark-bg) !important;
+    padding: 20px;
+}
+
+.wrap-login100 {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 25px;
+    padding: 40px !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.wrap-login100::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--cyan-neon), #00d4ff);
+    border-radius: 25px 0 0 25px;
+}
+
+.login100-form-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--cyan-neon) !important;
+    text-align: center;
+    margin-bottom: 35px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+}
+
+.wrap-input100 {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.label-input100 {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.2;
+    padding-left: 15px;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.input100 {
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    line-height: 1.2;
+    padding: 15px 20px;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px;
+    background: var(--dark-bg) !important;
+    color: white !important;
+    transition: all 0.3s;
+}
+
+.input100:focus {
+    outline: none;
+    border-color: var(--cyan-neon) !important;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+    background: rgba(26, 29, 33, 0.9) !important;
+}
+
+.focus-input100::before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--cyan-neon);
+    transition: 0.3s;
+}
+
+.input100:focus + .focus-input100::before {
+    width: 100%;
+}
+
+.container-login100-form-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.login100-form-btn {
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    display: block;
+    width: 100%;
+    height: 55px;
+    border-radius: 15px;
+    background: linear-gradient(45deg, var(--cyan-neon), #00d4ff) !important;
+    border: none !important;
+    color: #0f1113 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 25px rgba(0, 242, 255, 0.3);
+}
+
+.login100-form-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 242, 255, 0.4);
+}
+
+.flex-col-c {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.txt1 {
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.4;
+}
+
+.txt2 {
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--cyan-neon) !important;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.txt2:hover {
+    color: #00d4ff !important;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .wrap-login100 {
+        margin: 0 20px;
+        padding: 30px 25px !important;
+    }
+}

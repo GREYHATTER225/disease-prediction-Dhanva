@@ -1,0 +1,164 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    /* --- CREAM & ORANGE NEUMORPHIC THEME --- */
+    body {
+        background-color: #fffdfa; /* Cream Base */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .history-card {
+        border-radius: 30px;
+        padding: 30px;
+        background: #fffdfa;
+        box-shadow: 14px 14px 30px #ebe8e2, -14px -14px 30px #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        margin-bottom: 30px;
+        transition: transform 0.3s ease;
+    }
+
+    .history-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .info-label {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #a1887f;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: #5d4037;
+        margin-bottom: 0;
+    }
+
+    /* NEUMORPHIC INNER BOX */
+    .data-monitor {
+        padding: 15px;
+        border-radius: 20px;
+        background: #fffefc;
+        box-shadow: inset 5px 5px 12px #ebe8e2, inset -5px -5px 12px #ffffff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* ORANGE NEUMORPHIC BUTTONS */
+    .btn-neumorphic {
+        border: none;
+        border-radius: 15px;
+        padding: 10px 20px;
+        font-weight: 700;
+        font-size: 13px;
+        color: #fff;
+        background: linear-gradient(145deg, #ff9800, #f57c00);
+        box-shadow: 0 6px 15px rgba(245, 124, 0, 0.3), 
+                    inset 2px 2px 4px rgba(255, 255, 255, 0.2);
+        transition: 0.25s;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-neumorphic:hover {
+        transform: scale(1.05);
+        color: white;
+        box-shadow: 0 8px 20px rgba(245, 124, 0, 0.45);
+    }
+
+    .btn-outline-neumorphic {
+        background: #fffdfa;
+        color: #f57c00;
+        border: 2px solid #ff9800;
+        box-shadow: 4px 4px 10px #ebe8e2, -4px -4px 10px #ffffff;
+    }
+
+    /* STATUS BADGE */
+    .status-pill {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        background: #fffefc;
+        box-shadow: 2px 2px 5px #ebe8e2;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold" style="color: #4e342e;">Consultation History</h2>
+        <p class="text-muted">Review and manage your past medical analysis records.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            
+            {% for i in consultation %}
+            <div class="history-card">
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-3">
+                        <div class="data-monitor">
+                            <div class="info-label">Patient</div>
+                            <h6 class="info-value">{{i.patient.name}}</h6>
+                            <small class="text-muted" style="font-size: 11px;">{{i.patient.user.email}}</small>
+                            <div class="mt-3">
+                                <a href="{% url 'pviewprofile' i.patient.user.username %}" class="btn-neumorphic btn-outline-neumorphic w-100">
+                                    <i class="fas fa-user me-2"></i>Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="data-monitor">
+                            <div class="info-label">Predicted Condition</div>
+                            <h6 class="info-value" style="color: #e65100;">{{i.diseaseinfo.diseasename}}</h6>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="data-monitor">
+                            <div class="info-label">Consulted On</div>
+                            <p class="info-value">{{i.consultation_date}}</p>
+                            <div class="mt-2">
+                                <span class="status-pill {% if i.status == 'Active' %}text-success{% else %}text-warning{% endif %}">
+                                    <i class="fas fa-circle me-1" style="font-size: 8px;"></i> {{i.status}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 text-center">
+                        <div class="info-label mb-3">Continue Work</div>
+                        <form action="{% url 'consultationview' i.id %}" method="GET" class="m-0">
+                            {% csrf_token %} 
+                            <button type="submit" class="btn-neumorphic px-4 py-3 w-100">
+                                <i class="fas fa-stethoscope me-2"></i> Consultation
+                            </button>   
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="history-card text-center py-5">
+                <i class="fas fa-folder-open fa-3x mb-3" style="color: #ebe8e2;"></i>
+                <p class="text-muted">No consultation records found.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
