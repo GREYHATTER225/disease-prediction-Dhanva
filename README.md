@@ -16,7 +16,7 @@
 
 ---
 
-# 🌌 ░▒▓ OVERVIEW ▓▒░
+# 🌌  OVERVIEW 
 
 A **full-stack cyber-ready healthcare platform** that merges:
 
@@ -30,7 +30,7 @@ A **full-stack cyber-ready healthcare platform** that merges:
 
 ---
 
-# 🚨 ░▒▓ PROBLEM ▓▒░
+# 🚨 PROBLEM
 
 ```
 ❌ Limited healthcare access
@@ -39,10 +39,7 @@ A **full-stack cyber-ready healthcare platform** that merges:
 ❌ Rural accessibility issues
 ```
 
----
-
-# ⚡ ░▒▓ SOLUTION ▓▒░
-
+# ⚡ SOLUTION
 ```
 ✔ Instant ML predictions
 ✔ Remote doctor access
@@ -237,10 +234,6 @@ fork → branch → commit → PR
 
 # 👨‍💻 ░▒▓ AUTHOR ▓▒░
 
-[Your GitHub]
+[GREY]
 
----
-⚡ **Cyberpunk Healthcare** ⚡
 
-# disease-prediction-Dhanva
-# disease-prediction-Dhanva
